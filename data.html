@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Providing Data &#8212; GeoERA GIP User Documentation 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Providing Metadata" href="metadata.html" />
+    <link rel="prev" title="Welcome to GeoERA GIP documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="metadata.html" title="Providing Metadata"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GeoERA GIP documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GeoERA GIP User Documentation 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="providing-data">
+<h1>Providing Data<a class="headerlink" href="#providing-data" title="Permalink to this headline">¶</a></h1>
+<p>Data can be supplied to the GIP in 3 ways</p>
+<ul class="simple">
+<li><p>Providing GIS data (GeoPackage)</p></li>
+<li><p>Providing OGC Web Services</p></li>
+<li><p>Providing secure Database access</p></li>
+</ul>
+<div class="section" id="providing-gis-data">
+<h2>Providing GIS Data<a class="headerlink" href="#providing-gis-data" title="Permalink to this headline">¶</a></h2>
+<p>The preferred format to provide data is GeoPackage.</p>
+<p>The best support to provide GeoPackage is using QGIS 3.8 Zanzibar.</p>
+<div class="section" id="create-geopackage">
+<h3>Create Geopackage<a class="headerlink" href="#create-geopackage" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Download QGIS 3.8</p></li>
+<li><p>Import current data</p></li>
+<li><p>Make any styling changes required</p></li>
+<li><p>Open the processing toolbox (Ctrl+Alt+T)</p></li>
+<li><p>Open “Database” menu</p></li>
+<li><p>Select “Package Layers”</p></li>
+<li><p>Select input layers to package (3 dot button on right)</p></li>
+<li><p>Make sure “Save Layer Styles into GeoPackage” is selected</p></li>
+<li><p>Choose filename and destination of final geopackage</p></li>
+<li><p>Click Run</p></li>
+</ol>
+<p>Should now find your geopackage where ever you selected to save it. Drag and drop it into a new QGIS window to check it’s output is as expected.</p>
+</div>
+<div class="section" id="create-geopackage-alternative-route">
+<h3>Create Geopackage (alternative route)<a class="headerlink" href="#create-geopackage-alternative-route" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Download GDAL</p></li>
+<li><p>Check it has GeoPackage support using <cite>ogrinfo –formats</cite></p></li>
+</ol>
+<p>You should have something like <cite>GPKG -raster,vector- (rw+vs): GeoPackage</cite></p>
+<p>and also check that your input file format is listed</p>
+<ol class="arabic simple" start="3">
+<li><p>You can check what options you have to create a GPKG with:</p></li>
+</ol>
+<p><cite>ogrinfo –format GPKG</cite></p>
+<p>Help on options for GeoPackage can can be found at:</p>
+<p><a class="reference external" href="https://gdal.org/drivers/vector/gpkg.html">https://gdal.org/drivers/vector/gpkg.html</a></p>
+<p>and</p>
+<p><a class="reference external" href="https://gdal.org/drivers/raster/gpkg.html">https://gdal.org/drivers/raster/gpkg.html</a></p>
+<p>and</p>
+<p><a class="reference external" href="https://gdal.org/programs/ogr2ogr.html">https://gdal.org/programs/ogr2ogr.html</a></p>
+<ol class="arabic simple" start="4">
+<li><p>use <cite>ogr2oger</cite> to create and update your GeoPackage</p></li>
+</ol>
+<p>For example to add a directory of shapefiles use:</p>
+<p><cite>ogr2ogr -f “GPKG” filename.gpkg ./path/to/dir</cite></p>
+<p>and to add data to this geopackage (say from an Oracle table) you could use:</p>
+<p><cite>ogr2ogr -f “GPKG” filename.gpkg oraSource.ovf -nln my_new_layer_name -update”</cite></p>
+<p>Where <cite>oraSource.ovf</cite> is a virtual layer containing information about the Oracle database like:</p>
+<blockquote>
+<div><p>&lt;?xml version=”1.0” encoding=”UTF-8”?&gt;
+&lt;OGRVRTDataSource xmlns:xsi=”http://www.w3.org/2001/XMLSchema-instance”</p>
+<blockquote>
+<div><dl>
+<dt>xsi:noNamespaceSchemaLocation=”http://ogc2.bgs.ac.uk/xs/ogrvrt.xsd”&gt;</dt><dd><dl>
+<dt>&lt;OGRVRTLayer name=”mintell”&gt;</dt><dd><p>&lt;SrcDataSource&gt;OCI:<a class="reference external" href="mailto:USER/Password&#37;&#52;&#48;//host">USER/Password<span>&#64;</span>//host</a>:port/sid&lt;/SrcDataSource&gt;
+&lt;SrcSQL&gt;</p>
+<blockquote>
+<div><p>SELECT *
+FROM PUBLISHED.XXX</p>
+</div></blockquote>
+<p>&lt;/SrcSQL&gt;
+&lt;GeometryType&gt;wkbNone&lt;/GeometryType&gt;</p>
+</dd>
+</dl>
+<p>&lt;/OGRVRTLayer&gt;</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&lt;/OGRVRTDataSource&gt;</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="providing-web-services">
+<h2>Providing Web Services<a class="headerlink" href="#providing-web-services" title="Permalink to this headline">¶</a></h2>
+<p>We will try to assist with the setup of web services to serve data to EGDI,
+by providing a basic explanation of how to do so easily.</p>
+<div class="section" id="wms">
+<h3>WMS<a class="headerlink" href="#wms" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Be awesome</p></li>
+<li><p>Make things faster</p></li>
+</ul>
+</div>
+<div class="section" id="wfs">
+<h3>WFS<a class="headerlink" href="#wfs" title="Permalink to this headline">¶</a></h3>
+<p>Install $project by running:</p>
+<blockquote>
+<div><p>install project</p>
+</div></blockquote>
+</div>
+<div class="section" id="wcs">
+<h3>WCS<a class="headerlink" href="#wcs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Issue Tracker: github.com/$project/$project/issues</p></li>
+<li><p>Source Code: github.com/$project/$project</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
+<p>If you are having issues, please let us know.
+email: <a class="reference external" href="mailto:support&#37;&#52;&#48;geoera&#46;eu">support<span>&#64;</span>geoera<span>&#46;</span>eu</a>
+Issue Tracker: <a class="reference external" href="https://github.com/GeoEra-GIP/Project-Support-WP8">https://github.com/GeoEra-GIP/Project-Support-WP8</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/information-platform-logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Providing Data</a><ul>
+<li><a class="reference internal" href="#providing-gis-data">Providing GIS Data</a><ul>
+<li><a class="reference internal" href="#create-geopackage">Create Geopackage</a></li>
+<li><a class="reference internal" href="#create-geopackage-alternative-route">Create Geopackage (alternative route)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#providing-web-services">Providing Web Services</a><ul>
+<li><a class="reference internal" href="#wms">WMS</a></li>
+<li><a class="reference internal" href="#wfs">WFS</a></li>
+<li><a class="reference internal" href="#wcs">WCS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to GeoERA GIP documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="metadata.html"
+                        title="next chapter">Providing Metadata</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/data.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="metadata.html" title="Providing Metadata"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to GeoERA GIP documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GeoERA GIP User Documentation 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, GeoERA.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>
